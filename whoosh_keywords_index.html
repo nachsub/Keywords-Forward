@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+        <title>Search on ArXiv dataset</title>
+      </head>
+      <body>
+        <h1>Search for Keyword: </h1>
+        <!-- Add all HTML Code here -->
+        <input class="keyword" id="input" type="text" placeholder="Search for Keyword:"> </input>
+        More Keywords: <span class="fa fa-plus add"></span>
+        <div class="appending_div">
+          <div>
+          </div>
+        </div>
+        <input class="button" type="submit" value="Submit input">
+        <div class="container">
+        </div>
+      </body>
+      <script>
+      $(document).ready(function() {
+          var i = 1;
+          $('.add').on('click', function() {
+            var field = '<br><div>'+i+': <input class="keyword" type="text" placeholder="Search for Keyword:"> </div>';
+            $('.appending_div').append(field);
+            i = i+1;
+          })
+          $('.button').on('click', function() {
+            var keywords = document.getElementsByClassName("keyword");
+            var keywords_str = "";
+            for (var i = 0; i < keywords.length; i++) {
+              keywords_str += keywords[i].value + " "
+            }
+            $.get("http://10.0.0.38:8000/getmethod/"+keywords_str, function(data, query_results){
+                data = data.replace(/(?:\r\n|\r|\n)/g, '<br>');
+                jQuery(document).ready(function() {
+                  $(".container").replaceWith("<div class= 'container'>"+ data+ "</div>"); //query results
+                })
+              })
+          })
+        })
+
+      </script>
+    </html>
